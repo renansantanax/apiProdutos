@@ -1,9 +1,11 @@
 package br.com.cotiinformatica.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,21 +43,42 @@ public class ProdutoController {
 	}
 
 	@Operation(summary = "Serviço para atualizar produto.")
-	@PutMapping("atualizar")
-	public void atualizar() {
-		// TODO 
+	@PutMapping("atualizar/{id}")
+	public String atualizar(@PathVariable UUID id, @RequestBody @Valid ProdutoRequestDto request) {
+		
+		var produto = new Produto();
+		
+		produto.setId(id);
+		produto.setNome(request.getNome());
+		produto.setPreco(request.getPreco());
+		produto.setQuantidade(request.getQuantidade());
+		
+		var produtoRepository = new ProdutoRepository();
+		produtoRepository.update(produto, request.getCategoriaId());
+		
+		return "Produto atualizado com sucesso.";
 	}
 	
 	@Operation(summary = "Serviço para excluir produto.")
-	@DeleteMapping("excluir")
-	public void excluir() {
-		// TODO
+	@DeleteMapping("excluir/{id}")
+	public String excluir(@PathVariable UUID id) {
+		
+		//excluir o produto no banco de dados
+		var produtoRepository = new ProdutoRepository();
+		produtoRepository.delete(id);
+		
+		return "Produto excluído com sucesso.";
+		
 	}
 	
 	@Operation(summary = "Serviço para consultar todos os produtos.")
-	@GetMapping("consultar")
-	public void consultar() {
-		// TODO
+	@GetMapping("consultar/{nome}")
+	public List<Produto> consultar(@PathVariable String nome) {
+		
+		//Consultar todos os produtos do banco de dados através do nome
+		var produtoRepository = new ProdutoRepository();
+		return produtoRepository.findAll(nome);
+		
 	}
 	
 }
