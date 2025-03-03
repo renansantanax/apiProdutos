@@ -81,4 +81,14 @@ public class ProdutoController {
 		
 	}
 	
+	@Operation(summary = "Serviço para consultar 1 produto.")
+	@GetMapping("obter/{id}")
+	public Produto obter(@PathVariable UUID id) {
+		
+		//Consultar todos os produtos do banco de dados através do nome
+		var produtoRepository = new ProdutoRepository();
+		return produtoRepository.findById(id);
+		
+	}
+	
 }

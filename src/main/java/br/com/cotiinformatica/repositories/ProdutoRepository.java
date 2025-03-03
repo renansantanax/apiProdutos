@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.cotiinformatica.entities.Categoria;
 import br.com.cotiinformatica.entities.Produto;
 import br.com.cotiinformatica.factories.ConnectionFactory;
 
@@ -78,7 +79,22 @@ public class ProdutoRepository {
 
 			var connection = connectionFactory.getConnection();
 
-			var statement = connection.prepareStatement("SELECT * FROM produto WHERE nome ILIKE ? ORDER BY nome");
+			var query = """
+					select
+					p.id as idproduto,
+					p.nome as nomeproduto,
+					p.preco,
+					p.quantidade,
+					c.id as idcategoria,
+					c.nome as nomecategoria
+					from produto p
+					inner join categoria c
+					on c.id = p.categoria_id
+					where p.nome ilike ?
+					order by p.nome;
+									""";
+
+			var statement = connection.prepareStatement(query);
 			statement.setString(1, "%" + nome + "%");
 			var result = statement.executeQuery();
 
@@ -86,12 +102,14 @@ public class ProdutoRepository {
 
 			while (result.next()) {
 
-				var produto = new Produto();
-
-				produto.setId(UUID.fromString(result.getString("id")));
-				produto.setNome(result.getString("nome"));
+				var produto = new Produto(); // instanciando produto
+				produto.setCategoria(new Categoria()); // instanciando categoria;
+				produto.setId(UUID.fromString(result.getString("idproduto")));
+				produto.setNome(result.getString("nomeproduto"));
 				produto.setPreco(result.getDouble("preco"));
 				produto.setQuantidade(result.getInt("quantidade"));
+				produto.getCategoria().setId(UUID.fromString(result.getString("idcategoria")));
+				produto.getCategoria().setNome(result.getString("nomecategoria"));
 
 				lista.add(produto);
 
@@ -100,7 +118,56 @@ public class ProdutoRepository {
 			connection.close();
 
 			return lista;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	// Método para consultar 1 produto através do id
+	public Produto findById(UUID id) {
+		try {
+
+			var connection = connectionFactory.getConnection();
+
+			var query = """
+					select
+					p.id as idproduto,
+					p.nome as nomeproduto,
+					p.preco,
+					p.quantidade,
+					c.id as idcategoria,
+					c.nome as nomecategoria
+					from produto p
+					inner join categoria c
+					on c.id = p.categoria_id
+					where p.id = ?;
+									""";
+
+			var statement = connection.prepareStatement(query);
+			statement.setObject(1, id);
+			var result = statement.executeQuery();
+
+			Produto produto = null;
 			
+			if (result.next()) {
+
+				produto = new Produto(); // instanciando produto
+				produto.setCategoria(new Categoria()); // instanciando categoria;
+				produto.setId(UUID.fromString(result.getString("idproduto")));
+				produto.setNome(result.getString("nomeproduto"));
+				produto.setPreco(result.getDouble("preco"));
+				produto.setQuantidade(result.getInt("quantidade"));
+				produto.getCategoria().setId(UUID.fromString(result.getString("idcategoria")));
+				produto.getCategoria().setNome(result.getString("nomecategoria"));
+
+			}
+
+			connection.close();
+
+			return produto;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
