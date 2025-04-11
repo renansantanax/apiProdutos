@@ -1,7 +1,7 @@
 
 # 🛒 API de Produtos – Spring Boot
 
-API de Produtos é um projeto backend desenvolvido com Spring Boot 3+, responsável por gerenciar o ciclo completo de produtos — desde cadastro até atualização e remoção. Este backend se integra diretamente com o frontend Angular disponível no repositório webProdutos, formando um sistema completo fullstack. O objetivo é fornecer uma base robusta, segura e escalável para aplicações de e-commerce, catálogos internos ou sistemas administrativos. O projeto segue princípios de boas práticas de arquitetura em camadas, uso de DTOs, segurança com JWT e documentação automatizada com Swagger/OpenAPI, oferecendo um ambiente moderno e profissional para APIs RESTful.
+API de Produtos é um projeto backend desenvolvido com Spring Boot 3+, responsável por gerenciar o ciclo completo de produtos — desde cadastro até atualização e remoção. Este backend se integra diretamente com o frontend Angular disponível no repositório [Web Produtos](https://github.com/renansantanax/webProdutos), formando um sistema completo fullstack. O objetivo é fornecer uma base robusta, segura e escalável para aplicações de e-commerce, catálogos internos ou sistemas administrativos. O projeto segue princípios de boas práticas de arquitetura em camadas, uso de DTOs, segurança com JWT e documentação automatizada com Swagger/OpenAPI, oferecendo um ambiente moderno e profissional para APIs REST.
 ---
 
 ## 🚀 Tecnologias Utilizadas
@@ -49,16 +49,6 @@ docker-compose up --build
 Inclui:
 - Banco PostgreSQL
 - API Spring Boot
-
----
-
-## 🧪 Testes
-
-O projeto conta com testes automatizados utilizando **JUnit 5**, com foco em endpoints e validações.
-
-```bash
-mvn test
-```
 
 ---
 
